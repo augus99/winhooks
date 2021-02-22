@@ -19,9 +19,16 @@ namespace Winhooks {
         private const int WM_SYSKEYDOWN = 0x0104;
         private IntPtr hookId;
 
+        public event KeyHookEventHandler KeyDown;
+
+        public KeyboardHook(KeyHookEventHandler handler) {
+            this.KeyDown += handler;
+        }
+
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam) {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN) {
                 KBDLLHOOKSTRUCT hkStr = Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(lParam);
+                KeyDown?.Invoke(this, new KeyHookEventArgs(hkStr.vkCode));
             }
             return Util.CallNextHookEx(hookId, nCode, wParam, lParam);
         }
