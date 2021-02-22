@@ -9,3 +9,22 @@
         <img src="https://img.shields.io/github/commit-activity/y/augus99/winhooks?style=plastic">
     </p>
 </p>
+
+## Description
+This library focuses on the monitoring of keyboard and mouse inputs.
+
+## Build
+To build the `dll` you will need dotnet installed on your computer, then type the following lines on your preferred terminal
+```console
+augus99@home:~/Desktop $ git clone https://github.com/augus99/winhooks.git
+augus99@home:~/Desktop $ cd winhooks
+augus99@home:~/Desktop/winhooks $ dotnet build
+```
+
+## Example
+The following example will print every key pressed to the console
+```cs
+new KeyboardHook((sender, args) => {
+    Console.WriteLine(args.KeyPressed);
+});
+```
