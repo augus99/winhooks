@@ -25,9 +25,16 @@ namespace Winhooks {
         private const int WM_RBUTTONDOWN = 0x0204;
         private IntPtr hookId;
 
+        public event MouseHookEventHandler Click;
+
+        public MouseHook(MouseHookEventHandler handler) {
+            Click += handler;
+        }
+
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam) {
             if (nCode >= 0 && (wParam == (IntPtr)WM_LBUTTONDOWN || wParam == (IntPtr)WM_RBUTTONDOWN)) {
                 MSLLHOOKSTRUCT hkStr = Marshal.PtrToStructure<MSLLHOOKSTRUCT>(lParam);
+                Click?.Invoke(this, new MouseHookEventArgs(hkStr.pt.x, hkStr.pt.y, (MouseButton)((int)wParam)));
             }
 
             return Util.CallNextHookEx(hookId, nCode, wParam, lParam);
